@@ -10,7 +10,6 @@ import NoResults from "@/components/no-result";
 import ProductCard from "@/components/ui/product-card";
 import MobileFilters from "./components/mobile-filter";
 
-
 export const revalidate = 0;
 
 interface CategoryPageProps {
@@ -18,26 +17,26 @@ interface CategoryPageProps {
     categoryId: string;
   };
   searchParams: {
-    colorId: string;
-    sizeId: string;
+    colorId?: string;
+    sizeId?: string;
   };
 }
 
-const Categorypage: React.FC<CategoryPageProps> = async ({
+const CategoryPage = async ({
   params,
   searchParams,
-}) => {
-  const { categoryId } = await params;
-  const { colorId, sizeId } = await searchParams;
+}: CategoryPageProps) => {
+  const { categoryId } = params;
+  const { colorId, sizeId } = searchParams;
+  
   const products = await getProducts({
-    categoryId: categoryId,
-    colorId: colorId,
-    sizeId: sizeId,
+    categoryId,
+    colorId,
+    sizeId,
   });
   const sizes = await getSizes();
   const colors = await getColors();
   const category = await getCategory(categoryId);
-  
 
   return (
     <div className="bg-white">
@@ -53,11 +52,9 @@ const Categorypage: React.FC<CategoryPageProps> = async ({
             <div className="mt-6 lg:col-span-4 lg:mt-0">
               {products.length === 0 && <NoResults/>}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {
-                  products.map((item)=>(
-                    <ProductCard key={item.id} data={item}/>
-                  ))
-                }
+                {products.map((item) => (
+                  <ProductCard key={item.id} data={item}/>
+                ))}
               </div>
             </div>
           </div>
@@ -67,4 +64,4 @@ const Categorypage: React.FC<CategoryPageProps> = async ({
   );
 };
 
-export default Categorypage;
+export default CategoryPage;

@@ -6,17 +6,31 @@ import ProductList from "@/components/product-list";
 import Container from "@/components/ui/container";
 
 interface ProductPageProps {
-  params: { productId: string };
+  params: {
+    productId: string;
+  };
 }
 
-const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
-  const { productId } = await params;
-  const product = await getProduct(productId);
+const ProductPage = async ({ params }: ProductPageProps) => {
+  const product = await getProduct(params.productId);
   const suggestedProducts = await getProducts({
     categoryId: product?.category?.id,
   });
+
+  if (!product) {
+    return (
+      <div className="bg-white">
+        <Container>
+          <div className="px-4 py-10 sm:px-6 lg:px-8">
+            <p>Product not found</p>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white ">
+    <div className="bg-white">
       <Container>
         <div className="px-4 py-10 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
@@ -25,7 +39,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
               <Info data={product} />
             </div>
           </div>
-          <hr className="m-10" />
+          <hr className="my-10" />
           <ProductList title="Related Items" items={suggestedProducts} />
         </div>
       </Container>
