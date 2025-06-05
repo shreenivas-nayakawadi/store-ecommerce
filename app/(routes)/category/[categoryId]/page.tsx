@@ -9,6 +9,7 @@ import Filter from "./components/filter";
 import NoResults from "@/components/no-result";
 import ProductCard from "@/components/ui/product-card";
 import MobileFilters from "./components/mobile-filter";
+import { NextPage } from "next";
 
 export const revalidate = 0;
 
@@ -22,10 +23,10 @@ interface CategoryPageProps {
   };
 }
 
-const CategoryPage = async ({
+const CategoryPage: NextPage<CategoryPageProps> = async ({
   params,
   searchParams,
-}: CategoryPageProps) => {
+}) => {
   const { categoryId } = params;
   const { colorId, sizeId } = searchParams;
   
